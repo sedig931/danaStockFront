@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       router : useRouter(),
-      userName:'sedig931',
-      password:'123456',
+      userName:'',
+      password:'',
       //propreties
     };
   },

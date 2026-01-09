@@ -1,5 +1,5 @@
-const SERVER_URL = 'http://localhost:301';
-// const SERVER_URL = 'https://danastocks.netlify.app/api';
+// const SERVER_URL = 'http://localhost:301';
+const SERVER_URL = 'https://danastocks.netlify.app/api';
 
 export const addProduct = async function (product) {
     try {

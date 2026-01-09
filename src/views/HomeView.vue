@@ -2,6 +2,9 @@
   <div class="home-container flex-row">
     <div class="inner-home-container flex-column">
       <div class="add-new-div flex-row">
+        <div class="add-new-btn-div flex-row m-1" @click="this.editProduct" v-if="this.showEditBtn">
+          <i class="bi bi-vignette plus-icon flex-row"></i>
+        </div>
         <div class="add-new-btn-div flex-row m-1" @click="this.addNewProduct">
           <i class="bi bi-plus-circle-dotted plus-icon flex-row"></i>
         </div>
@@ -27,6 +30,7 @@
   // const 
   export default {
   components: {},
+  props: ["sku"],
   data() {
     return {
       router : useRouter(),
@@ -34,7 +38,8 @@
         {sku:'YT-123456',place:'0 => 1 => 2'},
       ],
       productSku:'',
-      productPlace:''
+      productPlace:'',
+      showEditBtn:false,
       //propreties
     };
   },
@@ -54,36 +59,33 @@
         if(this.productSku !== ''){        
         const item = await getProduct(this.productSku.toUpperCase());
         this.productPlace = item.place;
-        // this.products.forEach((product,index) => {
-        //   if(this.productSku.toLocaleUpperCase() === product.sku){
-        //     this.productPlace = product.place
-        //   }else {
-        //     this.productPlace = 'not found or nedded to add...'
-        //   }
-        // }
-        // );
-        
-
+        this.showEditBtn = true;
       } else {
           this.productPlace = 'add sku first'
       }
       }catch(err){
         this.productPlace = 'error ! item not found or wrong...'
-        console.log(err.message);
+        // console.log(err.message);
       }
 
     },
     addNewProduct(){
-      // console.log('go to add new...');
       this.$router.push({ name: 'addNew'});
     },
     popProduct(){
-      // console.log('pop this one..');
       this.$router.push({ name: 'remove'});
-      
+    },
+    editProduct(){
+      this.$router.push({ name: 'edit',params:{sku:this.productSku,place:this.productPlace}});      
     }
   },
   mounted() {
+    if(this.$route.params.sku){
+      this.productSku = this.$route.params.sku;
+      this.productPlace = this.$route.params.place;
+      this.showEditBtn = true;
+    }
+    
     this.checkActiveUser();
   },
 };

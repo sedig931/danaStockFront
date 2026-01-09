@@ -4,7 +4,7 @@
           <div class="back-home-div flex-row" @click="this.goBack">
             <i class="bi bi-chevron-left goleft-icon flex-row"></i>
           </div>
-          <form class="sedig-form flex-column" @submit.prevent="this.addProduct">
+          <form class="sedig-form flex-column" @submit.prevent="this.editProduct">
             <div class="sku-input-btn-add flex-row">
                 <input required type="text" class="sku-input" placeholder="sku" v-model="this.productSku">
             </div>
@@ -15,7 +15,7 @@
               <label for="" :class="this.lbltxt.includes('error') ? 'lbl-not-success' : 'lbl-success'">{{this.lbltxt}}</label>
             </div>
             <div class="sku-input-btn-add flex-row">
-                <button class="add-btn">add</button>
+                <button class="add-btn">save</button>
             </div>
           </form>
         </div>
@@ -23,7 +23,7 @@
 </template>
 <script>
   import { useRouter } from 'vue-router'
-  import {addProduct} from '../../module/pushProduct/addNewProduct.js';
+  import {editProduct} from '../../module/pushProduct/addNewProduct.js';
 export default {
   components: {},
   data() {
@@ -31,20 +31,18 @@ export default {
         router : useRouter(),
         productSku:'',
         productPlace:'',
-        lbltxt:''
+        lbltxt:'',
       //propreties
     };
   },
   methods: {
-    async addProduct(){
+    async editProduct(){
       try{
-        const productSku = await addProduct({sku : this.productSku.toUpperCase(), place : this.productPlace});
-        if(productSku !== 200) {
-          this.$router.push({name: "home", params:{sku:productSku.sku, place:productSku.place}})
-        }else {
-          this.productSku = this.productPlace = '' ;
-          this.lbltxt = 'successfully added';
-        }
+        await editProduct({sku : this.productSku.toUpperCase(), place : this.productPlace});
+        this.lbltxt = 'successfully edit';
+        setTimeout(()=>{
+            this.$router.push({name: "home", params:{sku:this.productSku, place:this.productPlace}})
+        },1000);
       }catch(err){
         // console.log(err);
         this.lbltxt = 'sorry there is error...';
@@ -54,7 +52,10 @@ export default {
       this.$router.push({ name: 'home'});
     }
   },
-  mounted() {},
+  mounted() {
+    this.productSku = this.$route.params.sku;
+    this.productPlace = this.$route.params.place
+  },
 };
 </script>
 <style scoped>

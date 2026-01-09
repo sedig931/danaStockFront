@@ -1,11 +1,11 @@
-// const SERVER_URL = 'http://localhost:301';
-const SERVER_URL = 'https://danastocks.netlify.app/api';
+const SERVER_URL = 'http://localhost:301';
+// const SERVER_URL = 'https://danastocks.netlify.app/api';
 
 export const addProduct = async function (product) {
     try {
         // console.log('here in modle...',product);
         
-        // let productAdded = {};
+        let added = {};
         await fetch(`${SERVER_URL}/items/push/item`, {
             credentials: "include",
             method: "POST",
@@ -14,10 +14,10 @@ export const addProduct = async function (product) {
             },
             // mode: "no-cors",
             body: JSON.stringify(product),
-        });
-        // .then(res => res.json())
-        //     .then(data => productAdded = data);
-        // return productAdded;
+        })
+        .then(res => res.json())
+        .then(data => added = data);
+        return added;
     } catch (err) {
         throw err;
     }
@@ -36,6 +36,24 @@ export const getProduct = async function (sku) {
         .then(res => res.json())
             .then(data => item = data);
         return item;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const editProduct = async function (product) {
+    try {
+        // console.log(product);
+        await fetch(`${SERVER_URL}/items/edit/item`, {
+            credentials: "include",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+            ,
+            body: JSON.stringify(product),
+            // mode: "no-cors",
+        });
     } catch (err) {
         throw err;
     }
